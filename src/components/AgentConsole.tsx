@@ -56,7 +56,7 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
     "ticket-5": "norman@oscorp.com"
   };
 
-  const [activeTicket, setActiveTicket] = useState<Ticket>(() => {
+  const [activeTicket, setActiveTicket] = useState<Ticket | undefined>(() => {
     return tickets.find(t => t.status === 'Open') || tickets[0];
   });
   
@@ -88,24 +88,37 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
   const [copied, setCopied] = useState<boolean>(false);
   const [markdownText, setMarkdownText] = useState<string>('');
 
-  const detectedLang = detectLanguage(activeTicket.content);
-  const [editorText, setEditorText] = useState(activeTicket.aiSuggestedDraft[detectedLang]);
+  const detectedLang = activeTicket ? detectLanguage(activeTicket.content) : 'en';
+  const [editorText, setEditorText] = useState<string>(() => {
+    return activeTicket ? activeTicket.aiSuggestedDraft[detectedLang] : '';
+  });
 
   // Reset force escalation flag when active ticket changes
   useEffect(() => {
+    if (!activeTicket) return;
     setIsEscalateForced(false);
-  }, [activeTicket.id]);
+  }, [activeTicket?.id]);
 
   // Sync active ticket with updated tickets array from props
   useEffect(() => {
+    if (!activeTicket) {
+      if (tickets.length > 0) {
+        setActiveTicket(tickets.find(t => t.status === 'Open') || tickets[0]);
+      }
+      return;
+    }
     const synced = tickets.find(t => t.id === activeTicket.id);
     if (synced) {
       setActiveTicket(synced);
+    } else if (tickets.length > 0) {
+      // Fallback if current active ticket is removed/not found
+      setActiveTicket(tickets.find(t => t.status === 'Open') || tickets[0]);
     }
-  }, [tickets, activeTicket.id]);
+  }, [tickets, activeTicket?.id]);
 
   // Sync editor text with ticket dynamic draft using client email auto-detected language
   useEffect(() => {
+    if (!activeTicket) return;
     const lang = detectLanguage(activeTicket.content);
     
     // 1. L2 resolved state (TRT response generation)
@@ -134,7 +147,7 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
     else {
       setEditorText(activeTicket.aiSuggestedDraft[lang]);
     }
-  }, [activeTicket.id, activeTicket.status, activeTicket.olaResolved, isEscalateForced, assignedTeam]);
+  }, [activeTicket?.id, activeTicket?.status, activeTicket?.olaResolved, isEscalateForced, assignedTeam]);
 
   // Handle PII Reveal verification with strict server emulation
   const handlePiiReveal = (e: React.FormEvent) => {
@@ -142,7 +155,8 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
     if (auditReason.trim().length >= 5) {
       // Simulate POST /api/audit/pii-view request. Original PII is fetched ONLY here.
       setTimeout(() => {
-        const fetchedOriginalEmail = secureServerPiiDb[activeTicket.id] || (activeTicket.id.includes('injected') ? "tony@stark.com" : "support@pii-isolated.com");
+        const ticketId = activeTicket?.id || '';
+        const fetchedOriginalEmail = secureServerPiiDb[ticketId] || (ticketId.includes('injected') ? "tony@stark.com" : "support@pii-isolated.com");
         setUnmaskedEmail(fetchedOriginalEmail);
         setRevealPii(true);
         setShowAuditModal(false);
@@ -171,6 +185,20 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
 
   const targetLimitText = formatOlaLimit(tempRecoveryMinutes);
   const targetSeverity = tempRecoveryMinutes <= 120 ? 'URGENT' : 'NORMAL';
+
+  if (!activeTicket) {
+    return (
+      <div className="flex-1 flex items-center justify-center p-8 bg-slate-950 text-slate-400">
+        <div className="text-center space-y-4">
+          <AlertTriangle className="w-10 h-10 text-slate-500 mx-auto animate-pulse" />
+          <div className="space-y-1">
+            <p className="text-sm font-bold text-slate-200">티켓이 존재하지 않습니다</p>
+            <p className="text-xs text-slate-500">수파베이스 데이터베이스가 로딩 중이거나 티켓 레코드가 비어 있습니다.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const getEscalationMarkdown = () => {
     const email = revealPii ? unmaskedEmail : activeTicket.emailMasked;
