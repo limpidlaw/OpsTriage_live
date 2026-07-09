@@ -465,6 +465,11 @@ export const App: React.FC = () => {
   const [starkHealth, setStarkHealth] = useState<number>(45); // Initial Warn/At Risk state
   const [starkStatus, setStarkStatus] = useState<string>('At Risk');
 
+  // Admin lock PIN state
+  const [adminPin, setAdminPin] = useState<string>(() => {
+    return import.meta.env.VITE_ADMIN_PIN || '0000';
+  });
+
   // Global Tickets State
   const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
 
@@ -539,6 +544,16 @@ export const App: React.FC = () => {
           setIsSimulatorActive(false);
         }
       }
+
+      // 3. Fetch global app settings for admin pin [REQ_DEMO_PIN_LOCKDOWN]
+      const { data: settingsData } = await supabase
+        .from('app_settings')
+        .select('admin_pin')
+        .eq('id', 'default_config')
+        .single();
+      if (settingsData && settingsData.admin_pin) {
+        setAdminPin(settingsData.admin_pin);
+      }
     } catch (e) {
       console.error("Error fetching live Supabase data:", e);
     }
@@ -555,6 +570,9 @@ export const App: React.FC = () => {
           fetchSupabaseData();
         })
         .on('postgres_changes', { event: '*', schema: 'public', table: 'accounts' }, () => {
+          fetchSupabaseData();
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'app_settings' }, () => {
           fetchSupabaseData();
         })
         .subscribe();
@@ -987,6 +1005,7 @@ export const App: React.FC = () => {
             setIsAdminAuthenticated={setIsAdminAuthenticated}
             isSimulatorActive={isSimulatorActive}
             setCurrentTab={setCurrentTab}
+            adminPin={adminPin}
           />
         )}
         

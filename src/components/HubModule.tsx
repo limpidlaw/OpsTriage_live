@@ -14,6 +14,7 @@ interface HubProps {
   setIsAdminAuthenticated: (val: boolean) => void;
   isSimulatorActive: boolean;
   setCurrentTab: (tab: string) => void;
+  adminPin: string;
 }
 
 export const HubModule: React.FC<HubProps> = ({
@@ -21,7 +22,8 @@ export const HubModule: React.FC<HubProps> = ({
   isAdminAuthenticated,
   setIsAdminAuthenticated,
   isSimulatorActive,
-  setCurrentTab
+  setCurrentTab,
+  adminPin
 }) => {
   const t = translations[locale];
   const [pinInput, setPinInput] = useState('');
@@ -41,7 +43,7 @@ export const HubModule: React.FC<HubProps> = ({
 
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pinInput === (import.meta.env.VITE_ADMIN_PIN || '0000')) {
+    if (pinInput === adminPin) {
       setIsAdminAuthenticated(true);
       setShowPinModal(false);
       setPinInput('');
