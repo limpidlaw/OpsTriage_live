@@ -470,6 +470,9 @@ export const App: React.FC = () => {
     return import.meta.env.VITE_ADMIN_PIN || '0000';
   });
 
+  // DB Fetch Error telemetry
+  const [dbError, setDbError] = useState<string | null>(null);
+
   // Global Tickets State
   const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
 
@@ -484,6 +487,7 @@ export const App: React.FC = () => {
   const fetchSupabaseData = async () => {
     if (!isSupabaseConfigured) return;
     try {
+      setDbError(null);
       // 1. Fetch tickets
       const { data: ticketData, error: ticketErr } = await supabase
         .from('tickets')
@@ -546,16 +550,18 @@ export const App: React.FC = () => {
       }
 
       // 3. Fetch global app settings for admin pin [REQ_DEMO_PIN_LOCKDOWN]
-      const { data: settingsData } = await supabase
+      const { data: settingsData, error: settingsErr } = await supabase
         .from('app_settings')
         .select('admin_pin')
         .eq('id', 'default_config')
         .single();
+      if (settingsErr) throw settingsErr;
       if (settingsData && settingsData.admin_pin) {
         setAdminPin(settingsData.admin_pin);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error("Error fetching live Supabase data:", e);
+      setDbError(e.message || String(e));
     }
   };
 
@@ -811,8 +817,15 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-screen bg-slate-950 text-slate-100 flex flex-row transition-colors duration-300 overflow-hidden">
-      {/* 1. Left Collapsible Sidebar */}
+    <div className="h-screen w-screen bg-slate-950 text-slate-100 flex flex-col transition-colors duration-300 overflow-hidden">
+      {dbError && (
+        <div className="bg-red-950/80 border-b border-red-500/30 p-2 text-center text-xs font-mono text-red-300 flex items-center justify-center space-x-2 z-50">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+          <span>[Supabase Integration Error] {dbError}</span>
+        </div>
+      )}
+      <div className="flex-1 flex flex-row overflow-hidden">
+        {/* 1. Left Collapsible Sidebar */}
       <aside className={`flex flex-col justify-between border-r border-slate-800 bg-slate-900 transition-all duration-300 z-30 ${
         isSidebarCollapsed ? 'w-16' : 'w-56'
       }`}>
@@ -1077,6 +1090,7 @@ export const App: React.FC = () => {
       {aiChatbotEnabled && (
         <AiChatbotWidget currentTab={currentTab} aiModelName={aiConfigs.engine03.model} />
       )}
+      </div>
     </div>
   </div>
   );
