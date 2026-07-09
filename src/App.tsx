@@ -566,13 +566,13 @@ export const App: React.FC = () => {
       // Setup Realtime replication subscriber
       const channel = supabase
         .channel('schema-db-changes')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'tickets' }, () => {
+        .on('postgres_changes', { event: '*', schema: 'platform_core', table: 'tickets' }, () => {
           fetchSupabaseData();
         })
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'accounts' }, () => {
+        .on('postgres_changes', { event: '*', schema: 'platform_core', table: 'accounts' }, () => {
           fetchSupabaseData();
         })
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'app_settings' }, () => {
+        .on('postgres_changes', { event: '*', schema: 'platform_core', table: 'app_settings' }, () => {
           fetchSupabaseData();
         })
         .subscribe();
