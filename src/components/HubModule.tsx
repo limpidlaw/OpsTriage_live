@@ -41,7 +41,7 @@ export const HubModule: React.FC<HubProps> = ({
 
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pinInput === '0000') {
+    if (pinInput === (import.meta.env.VITE_ADMIN_PIN || '0000')) {
       setIsAdminAuthenticated(true);
       setShowPinModal(false);
       setPinInput('');
