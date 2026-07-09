@@ -1,0 +1,313 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Melrose Flat Visual Identity Rules */
+* {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+body {
+  font-family: 'Pretendard', -apple-system, sans-serif;
+  font-size: 1.07rem !important;
+  letter-spacing: -0.01em;
+}
+
+.text-xs {
+  font-size: 0.85rem !important; /* ~13.6px */
+}
+
+.text-sm {
+  font-size: 0.965rem !important; /* ~15.4px */
+}
+
+.text-base {
+  font-size: 1.065rem !important; /* ~17px */
+}
+
+.text-lg {
+  font-size: 1.185rem !important; /* ~19px */
+}
+
+.text-2xl {
+  font-size: 1.65rem !important; /* ~26.4px */
+}
+
+.text-\[10px\] {
+  font-size: 12px !important;
+}
+
+.text-\[11px\] {
+  font-size: 13px !important;
+}
+
+/* Light/Dark Contrast Optimization (WCAG AA Compliance) */
+.dark {
+  --bg-color: #0b0f19;
+  --card-bg: #141a27;
+  --border-color: rgba(255, 255, 255, 0.05);
+  --text-color: #ededed;
+  --text-muted: #94a3b8;
+}
+
+:root:not(.dark) {
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --border-color: rgba(15, 23, 42, 0.08);
+  --text-color: #0f172a;
+  --text-muted: #475569; /* Strict Contrast > 4.5:1 against #ffffff and #f1f5f9 */
+}
+
+/* --- LIGHT MODE SPEC COMPLIANCE OVERRIDES (06 Spec Contrast Protection) --- */
+:root:not(.dark) .text-slate-100,
+:root:not(.dark) .text-slate-200,
+:root:not(.dark) .text-slate-300,
+:root:not(.dark) .text-slate-400 {
+  color: #0f172a !important; /* Force high contrast slate-900 */
+}
+
+:root:not(.dark) .text-slate-500,
+:root:not(.dark) .text-slate-600 {
+  color: #475569 !important; /* Force readable slate-600 */
+}
+
+:root:not(.dark) .bg-slate-900,
+:root:not(.dark) .bg-slate-900\/60,
+:root:not(.dark) .bg-slate-900\/40,
+:root:not(.dark) .bg-slate-900\/10 {
+  background-color: #ffffff !important; /* Force pure white card-bg */
+}
+
+:root:not(.dark) .bg-slate-950,
+:root:not(.dark) .bg-slate-950\/80,
+:root:not(.dark) .bg-slate-950\/20,
+:root:not(.dark) .bg-slate-950\/30 {
+  background-color: #f8fafc !important; /* Force light slate body-bg */
+}
+
+:root:not(.dark) .border-slate-800,
+:root:not(.dark) .border-slate-850,
+:root:not(.dark) .border-slate-750,
+:root:not(.dark) .border-slate-700\/50 {
+  border-color: rgba(15, 23, 42, 0.08) !important; /* Force clean light border */
+}
+
+/* Custom Spring Transition & Pulse */
+@keyframes soft-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.98); }
+}
+
+.animate-soft-pulse {
+  animation: soft-pulse 2s infinite ease-in-out;
+}
+
+/* Light Mode Chatbot Widget Override (Contrast AA - Only for expanded rounded-xl box) */
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl {
+  background-color: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .text-slate-200,
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .text-slate-100,
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .text-slate-300,
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .text-slate-400 {
+  color: #0f172a !important;
+}
+
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .text-slate-500,
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .text-slate-600 {
+  color: #475569 !important;
+}
+
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .bg-slate-950\/40,
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .bg-slate-950\/60,
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .bg-slate-900\/90,
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .bg-slate-850,
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .bg-slate-800 {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .border-slate-800,
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .border-slate-750,
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .border-slate-700\/30 {
+  border-color: rgba(15, 23, 42, 0.06) !important;
+}
+
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl input {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .text-blue-300,
+:root:not(.dark) .fixed.bottom-4.right-4.rounded-xl .text-blue-200 {
+  color: #1d4ed8 !important;
+}
+
+/* Force user chat bubble to retain blue background and white text */
+:root:not(.dark) .fixed.bottom-4.right-4 .bg-blue-600 {
+  background-color: #2563eb !important; /* bg-blue-600 */
+}
+
+:root:not(.dark) .fixed.bottom-4.right-4 .bg-blue-600 * {
+  color: #ffffff !important; /* text-white force */
+}
+
+/* Light Mode Active Ticket Card Background Override */
+:root:not(.dark) .bg-slate-800\/80 {
+  background-color: #eff6ff !important; /* bg-blue-50 */
+  border-color: #bfdbfe !important; /* border-blue-200 */
+}
+
+/* Light Mode Audit Justification Modal Overrides */
+:root:not(.dark) .audit-modal-mask {
+  background-color: rgba(15, 23, 42, 0.45) !important; /* Transparent dark overlay for backdrop clarity */
+  backdrop-filter: blur(1.5px) !important;
+}
+
+:root:not(.dark) .audit-modal-box {
+  background-color: #ffffff !important; /* Force pure white pop-up background */
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+:root:not(.dark) .audit-modal-box h3 {
+  color: #ef4444 !important; /* Maintain warning red title */
+}
+
+:root:not(.dark) .audit-modal-box p {
+  color: #334155 !important; /* High contrast dark grey text for explanation */
+  font-weight: 500 !important;
+}
+
+:root:not(.dark) .audit-modal-box textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+}
+
+:root:not(.dark) .audit-modal-box textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Light mode modal buttons */
+:root:not(.dark) .audit-modal-box button {
+  border-color: transparent !important;
+}
+
+:root:not(.dark) .audit-modal-box button:first-of-type {
+  background-color: #f1f5f9 !important; /* Cancel button light grey bg */
+  color: #334155 !important; /* Cancel button text */
+}
+
+:root:not(.dark) .audit-modal-box button:last-of-type {
+  background-color: #ef4444 !important; /* Confirm button bold red bg */
+  color: #ffffff !important; /* Confirm button white text */
+}
+
+:root:not(.dark) .audit-modal-box button:last-of-type[disabled] {
+  background-color: #e2e8f0 !important;
+  color: #94a3b8 !important;
+  cursor: not-allowed !important;
+}
+
+/* Button Touch Target Size Optimization (ui-ux-pro-max standard) */
+.py-1\.5 {
+  padding-top: 0.5rem !important; /* ~40px total height */
+  padding-bottom: 0.5rem !important;
+}
+
+.py-2\.5 {
+  padding-top: 0.65rem !important; /* ~44px total height */
+  padding-bottom: 0.65rem !important;
+}
+
+/* Light mode sidebar details override */
+:root:not(.dark) .bg-slate-850 {
+  background-color: #f1f5f9 !important; /* light slate hover */
+}
+
+:root:not(.dark) aside nav button:not(.bg-blue-600) {
+  color: #475569 !important; /* Slate-600 font for non-active nav button */
+}
+
+:root:not(.dark) aside nav button:not(.bg-blue-600):hover {
+  color: #0f172a !important; /* Slate-900 on hover */
+  background-color: #f1f5f9 !important;
+}
+
+:root:not(.dark) aside {
+  border-right-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+:root:not(.dark) .bg-slate-950 aside {
+  background-color: #ffffff !important;
+}
+
+/* --- Light Mode Form Inputs & Buttons Visibility Overrides --- */
+:root:not(.dark) input,
+:root:not(.dark) select,
+:root:not(.dark) textarea {
+  color: #0f172a !important; /* Force high contrast dark slate text */
+  background-color: #ffffff !important; /* Force white background for forms */
+  border-color: rgba(15, 23, 42, 0.15) !important;
+}
+
+:root:not(.dark) input::placeholder,
+:root:not(.dark) textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Tab 2 SLA Pre-set Load Button & Input Grid labels */
+:root:not(.dark) .bg-blue-950\/20 {
+  background-color: #eff6ff !important; /* light blue bg */
+  border-color: #bfdbfe !important;
+  color: #1d4ed8 !important; /* readable dark blue text */
+}
+
+:root:not(.dark) .bg-blue-950\/20:hover {
+  background-color: #dbeafe !important;
+}
+
+:root:not(.dark) .text-blue-400 {
+  color: #1d4ed8 !important; /* Force readable blue text */
+}
+
+/* Save Buttons Contrast Guard */
+:root:not(.dark) .bg-blue-650 {
+  background-color: #2563eb !important; /* Force true blue-600 */
+  color: #ffffff !important; /* Force readable white text */
+}
+
+:root:not(.dark) .bg-blue-650:hover {
+  background-color: #1d4ed8 !important;
+}
+
+:root:not(.dark) .bg-blue-650 * {
+  color: #ffffff !important;
+}
+
+/* General button contrast correction in right workspace */
+:root:not(.dark) button.bg-blue-650,
+:root:not(.dark) button.bg-blue-600 {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+:root:not(.dark) button.bg-blue-650:hover,
+:root:not(.dark) button.bg-blue-600:hover {
+  background-color: #1d4ed8 !important;
+}
+
+:root:not(.dark) button.bg-blue-650 *,
+:root:not(.dark) button.bg-blue-600 * {
+  color: #ffffff !important;
+}
+
+
+
+
