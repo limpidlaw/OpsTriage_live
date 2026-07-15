@@ -32,7 +32,11 @@ export const translations = {
       sending: "Sending...",
       delivered: "Delivered",
       failed: "Failed: Invalid Number",
-      outboundTitle: "AI Response Co-pilot Editor"
+      outboundTitle: "AI Response Co-pilot Editor",
+      noActiveTicketTitle: "No tickets found",
+      noActiveTicketDesc: "Supabase database is loading or ticket records are empty.",
+      copyDone: "Copied!",
+      copyBtn: "Copy"
     },
     runbooks: {
       title: "IT Runbooks & Incident Response",
@@ -86,7 +90,11 @@ export const translations = {
       sending: "발송 중...",
       delivered: "성공: 전송 완료",
       failed: "실패: 수신자 번호 오류",
-      outboundTitle: "AI Co-pilot 답변 추천 에디터"
+      outboundTitle: "AI Co-pilot 답변 추천 에디터",
+      noActiveTicketTitle: "티켓이 존재하지 않습니다",
+      noActiveTicketDesc: "수파베이스 데이터베이스가 로딩 중이거나 티켓 레코드가 비어 있습니다.",
+      copyDone: "복사 완료!",
+      copyBtn: "복사하기"
     },
     runbooks: {
       title: "IT 인시던트 긴급 대응 플레이북",
@@ -140,7 +148,11 @@ export const translations = {
       sending: "Enviando...",
       delivered: "Entregado",
       failed: "Error: Número no válido",
-      outboundTitle: "Editor de AI Co-pilot"
+      outboundTitle: "Editor de AI Co-pilot",
+      noActiveTicketTitle: "No se encontraron tickets",
+      noActiveTicketDesc: "La base de datos de Supabase se está inicializando o los registros de tickets están vacíos.",
+      copyDone: "¡Copiado!",
+      copyBtn: "Copiar"
     },
     runbooks: {
       title: "Libro de IT y Respuesta a Incidentes",

@@ -79,7 +79,12 @@ export const SlaDashboard: React.FC<SlaProps> = ({
   // Listen to event bus for Chart refreshing
   useEffect(() => {
     globalEventBus.on('HEALTH_GRAPH_REFRESH', () => {
-      setToastMessage(locale === 'ko' ? "B2B 고객사 헬스 그래프 갱신 완료" : "B2B Health Graph Refreshed.");
+      const msg = locale === 'ko' 
+        ? "B2B 고객사 헬스 그래프 갱신 완료" 
+        : locale === 'es' 
+          ? "Gráfico de salud B2B actualizado." 
+          : "B2B Health Graph Refreshed.";
+      setToastMessage(msg);
       setTimeout(() => setToastMessage(''), 3000);
     });
   }, [locale]);

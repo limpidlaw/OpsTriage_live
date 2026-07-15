@@ -133,7 +133,13 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
     setTimeout(() => {
       setJiraLoading(false);
       setJiraStatusMap(prev => ({ ...prev, [currentPb.id]: true }));
-      setToastMsg(locale === 'ko' ? "Jira Task 완료 웹훅 수신 완료!" : "Jira Task Done Webhook Received.");
+      setToastMsg(
+        locale === 'ko' 
+          ? "Jira Task 완료 웹훅 수신 완료!" 
+          : locale === 'es' 
+            ? "¡Jira Task Done Webhook Recibido!" 
+            : "Jira Task Done Webhook Received."
+      );
       setTimeout(() => setToastMsg(''), 2500);
 
       // Check if resolved based on team settings
@@ -154,7 +160,13 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
     setTimeout(() => {
       setGithubLoading(false);
       setGithubStatusMap(prev => ({ ...prev, [currentPb.id]: true }));
-      setToastMsg(locale === 'ko' ? "GitHub PR 머지 완료 웹훅 수신 완료!" : "GitHub PR Merged Webhook Received.");
+      setToastMsg(
+        locale === 'ko' 
+          ? "GitHub PR 머지 완료 웹훅 수신 완료!" 
+          : locale === 'es' 
+            ? "¡Webhook de GitHub PR Merged Recibido!" 
+            : "GitHub PR Merged Webhook Received."
+      );
       setTimeout(() => setToastMsg(''), 2500);
 
       // Check if resolved based on team settings
@@ -183,7 +195,13 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
       setGithubStatusMap(prev => ({ ...prev, [currentPb.id]: true }));
     }
 
-    setToastMsg(locale === 'ko' ? "수동 조치 완료 및 피드백 전송됨!" : "Manual resolution logged.");
+    setToastMsg(
+      locale === 'ko' 
+        ? "수동 조치 완료 및 피드백 전송됨!" 
+        : locale === 'es' 
+          ? "¡Resolución manual registrada!" 
+          : "Manual resolution logged."
+    );
     setTimeout(() => setToastMsg(''), 2500);
 
     const willResolve = pendingSystem === 'jira' 
@@ -239,11 +257,15 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
 
                   return isManualEscalated ? (
                     <div className="text-[7.5px] bg-amber-950 border border-amber-500/20 text-amber-400 font-black uppercase px-1.5 py-0.5 rounded tracking-wide mb-1 w-max">
-                      {locale === 'ko' ? `수동 이관: ${pb.ticketId.toUpperCase()}` : `MANUAL: ${pb.ticketId.toUpperCase()}`}
+                      {locale === 'ko' 
+                        ? `수동 이관: ${pb.ticketId.toUpperCase()}` 
+                        : locale === 'es'
+                          ? `MANUAL: ${pb.ticketId.toUpperCase()}`
+                          : `MANUAL: ${pb.ticketId.toUpperCase()}`}
                     </div>
                   ) : null;
                 })()}
-                <div className="text-xs font-bold text-slate-350 truncate">{pb.title}</div>
+                <div className="text-xs font-bold text-slate-355 truncate">{pb.title}</div>
                 <div className="flex items-center justify-between mt-2.5">
                   <span className="text-[8px] text-slate-500 font-bold">{pb.team}</span>
                   <span className={`text-[8px] font-black uppercase px-1 py-0.5 rounded ${
@@ -254,12 +276,12 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
                         : 'bg-slate-900 text-slate-500'
                   }`}>
                     {pb.status === 'Active Escalation' 
-                      ? (locale === 'ko' ? '에스컬레이션 활성' : 'Escalation')
+                      ? (locale === 'ko' ? '에스컬레이션 활성' : locale === 'es' ? 'Escalación' : 'Escalation')
                       : pb.status === 'Active Incident'
-                        ? (locale === 'ko' ? '인시던트 활성' : 'Active')
+                        ? (locale === 'ko' ? '인시던트 활성' : locale === 'es' ? 'Activo' : 'Active')
                         : pb.status === 'Resolved'
-                          ? (locale === 'ko' ? '해결 완료' : 'Resolved')
-                          : (locale === 'ko' ? '대기 중' : 'Standby')
+                          ? (locale === 'ko' ? '해결 완료' : locale === 'es' ? 'Resuelto' : 'Resolved')
+                          : (locale === 'ko' ? '대기 중' : locale === 'es' ? 'Espera' : 'Standby')
                     }
                   </span>
                 </div>
@@ -284,7 +306,11 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
             <div>
               <h2 className="text-lg font-black text-slate-100">{t.runbooks.title}</h2>
               <p className="text-[11px] text-slate-500">
-                {locale === 'ko' ? 'IT 인프라 장애 발생 OLA 복구 대응 현황 및 외부 툴 연동 상태.' : 'Incident management playbook execution dashboard with OLA counters.'}
+                {locale === 'ko' 
+                  ? 'IT 인프라 장애 발생 OLA 복구 대응 현황 및 외부 툴 연동 상태.' 
+                  : locale === 'es'
+                    ? 'Panel de control de ejecución de OLA con contadores de OLA e incidentes.'
+                    : 'Incident management playbook execution dashboard with OLA counters.'}
               </p>
             </div>
             {(currentPb.status === 'Active Incident' || currentPb.status === 'Active Escalation') && (
@@ -301,8 +327,8 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
               <div className="text-[10px] text-slate-500 font-bold uppercase">{t.runbooks.olaTimer}</div>
               <div className="text-[11px] text-slate-400 font-bold">
                 {(currentPb.status === 'Active Incident' || currentPb.status === 'Active Escalation')
-                  ? `${currentPb.team} ${locale === 'ko' ? "장애 기한 OLA 차감 중" : "OLA limit counting down"}` 
-                  : (locale === 'ko' ? "장애 해결 완료 (안정화 국면)" : "Incident Solved.")
+                  ? `${currentPb.team} ${locale === 'ko' ? "장애 기한 OLA 차감 중" : locale === 'es' ? "cuenta regresiva de OLA" : "OLA limit counting down"}` 
+                  : (locale === 'ko' ? "장애 해결 완료 (안정화 국면)" : locale === 'es' ? "Incidente resuelto." : "Incident Solved.")
                 }
               </div>
             </div>
@@ -445,14 +471,24 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
                         : 'bg-amber-600 hover:bg-amber-700 text-white border-amber-500'
                     }`}
                   >
-                    <span>{locale === 'ko' ? "GitHub 수동 조치 완료" : "Confirm Manual GitHub Resolution"}</span>
+                    <span>
+                      {locale === 'ko' 
+                        ? "GitHub 수동 조치 완료" 
+                        : locale === 'es'
+                          ? "Confirmar resolución de GitHub manual"
+                          : "Confirm Manual GitHub Resolution"}
+                    </span>
                   </button>
                 )
               )}
               {currentTeamSystem === 'custom' && (
                 telemetryIntegrations.customEnabled ? (
                   <div className="text-[10px] text-amber-500 font-bold bg-amber-950/20 border border-amber-500/20 px-3 py-1.5 rounded w-full text-center">
-                    {locale === 'ko' ? "IT 모니터링: 커스텀 내부 티켓 시스템 연동 상태 (모니터링 대응 중)" : "IT Monitoring: Custom internal ticket system integrated (Monitoring in progress)"}
+                    {locale === 'ko' 
+                      ? "IT 모니터링: 커스텀 내부 티켓 시스템 연동 상태 (모니터링 대응 중)" 
+                      : locale === 'es'
+                        ? "Monitoreo de IT: Sistema de tickets interno integrado (Monitoreo en progreso)"
+                        : "IT Monitoring: Custom internal ticket system integrated (Monitoring in progress)"}
                   </div>
                 ) : (
                   <button
@@ -464,7 +500,13 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
                         : 'bg-amber-600 hover:bg-amber-700 text-white border-amber-500'
                     }`}
                   >
-                    <span>{locale === 'ko' ? "Custom 수동 조치 완료" : "Confirm Manual Custom Resolution"}</span>
+                    <span>
+                      {locale === 'ko' 
+                        ? "Custom 수동 조치 완료" 
+                        : locale === 'es'
+                          ? "Confirmar resolución de Custom manual"
+                          : "Confirm Manual Custom Resolution"}
+                    </span>
                   </button>
                 )
               )}
@@ -472,7 +514,11 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
           </div>
         ) : (
           <div className="p-4 bg-emerald-950/20 border border-emerald-500/30 rounded-xl text-center text-xs text-emerald-400 font-black uppercase">
-            {locale === 'ko' ? `[${currentPb.title}] 복구 대응 완전 완료` : `[${currentPb.title}] Recovery complete.`}
+            {locale === 'ko' 
+              ? `[${currentPb.title}] 복구 대응 완전 완료` 
+              : locale === 'es'
+                ? `[${currentPb.title}] Recuperación completa.`
+                : `[${currentPb.title}] Recovery complete.`}
           </div>
         )}
       </div>
@@ -483,36 +529,50 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
             <div className="flex items-center space-x-2.5 text-amber-400">
               <AlertCircle className="w-5 h-5 text-amber-500 animate-pulse" />
               <h3 className="text-sm font-black text-slate-100">
-                {locale === 'ko' ? '수동 조치 증적 및 피드백 기입' : 'Log Manual Action & Evidence'}
+                {locale === 'ko' 
+                  ? '수동 조치 증적 및 피드백 기입' 
+                  : locale === 'es'
+                    ? 'Registrar acción manual y evidencia'
+                    : 'Log Manual Action & Evidence'}
               </h3>
             </div>
             <p className="text-[10.5px] text-slate-500 leading-relaxed">
               {locale === 'ko' 
                 ? '외부 API가 미연동된 수동 조치 티켓입니다. 사건의 사후 감사를 위해 담당자와 조치 사항을 기록해야 합니다.'
-                : 'Manual escalation requires documenting the resolved action trace details for B2B compliance audits.'}
+                : locale === 'es'
+                  ? 'La escalación manual requiere documentar los detalles del seguimiento de la acción resuelta para las auditorías de cumplimiento de B2B.'
+                  : 'Manual escalation requires documenting the resolved action trace details for B2B compliance audits.'}
             </p>
             
             <div className="space-y-3">
               <div className="space-y-1">
                 <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
-                  {locale === 'ko' ? 'L2 담당자 성명' : 'L2 Operator Name'}
+                  {locale === 'ko' 
+                    ? 'L2 담당자 성명' 
+                    : locale === 'es'
+                      ? 'Nombre del operador de L2'
+                      : 'L2 Operator Name'}
                 </label>
                 <input
                   type="text"
                   value={manualWorker}
                   onChange={(e) => setManualWorker(e.target.value)}
-                  placeholder={locale === 'ko' ? '예: 홍길동' : 'e.g. John Doe'}
+                  placeholder={locale === 'ko' ? '예: 홍길동' : locale === 'es' ? 'ej. Juan Pérez' : 'e.g. John Doe'}
                   className="w-full bg-slate-950 border border-slate-850 rounded px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
                 />
               </div>
               <div className="space-y-1">
                 <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
-                  {locale === 'ko' ? '조치 내역 요약' : 'Action Mitigation Summary'}
+                  {locale === 'ko' 
+                    ? '조치 내역 요약' 
+                    : locale === 'es'
+                      ? 'Resumen de mitigación de acción'
+                      : 'Action Mitigation Summary'}
                 </label>
                 <textarea
                   value={manualNote}
                   onChange={(e) => setManualNote(e.target.value)}
-                  placeholder={locale === 'ko' ? '조치한 상세 사항을 기술하십시오.' : 'e.g. Cleared log rotation leak...'}
+                  placeholder={locale === 'ko' ? '조치한 상세 사항을 기술하십시오.' : locale === 'es' ? 'ej. Se eliminó la fuga de rotación de registros...' : 'e.g. Cleared log rotation leak...'}
                   className="w-full h-16 bg-slate-950 border border-slate-850 rounded p-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500 resize-none leading-relaxed"
                 />
               </div>
@@ -523,7 +583,7 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
                 onClick={() => { setShowManualModal(false); setManualNote(''); setManualWorker(''); }}
                 className="flex-1 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-300 dark:border-transparent dark:bg-slate-800 dark:hover:bg-slate-750 dark:text-slate-400 dark:hover:text-slate-200 rounded text-xs font-bold transition-all"
               >
-                {locale === 'ko' ? '취소' : 'Cancel'}
+                {locale === 'ko' ? '취소' : locale === 'es' ? 'Cancelar' : 'Cancel'}
               </button>
               <button
                 onClick={submitManualResolve}
@@ -534,7 +594,7 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
                     : 'bg-slate-200 text-slate-400 border-slate-300 dark:bg-slate-800 dark:text-slate-600 dark:border-transparent cursor-not-allowed'
                 }`}
               >
-                {locale === 'ko' ? '기입 완료' : 'Submit Log'}
+                {locale === 'ko' ? '기입 완료' : locale === 'es' ? 'Enviar registro' : 'Submit Log'}
               </button>
             </div>
           </div>

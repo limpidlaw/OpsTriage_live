@@ -1086,7 +1086,7 @@ export const App: React.FC = () => {
       </main>
 
       {aiChatbotEnabled && (
-        <AiChatbotWidget currentTab={currentTab} aiModelName={aiConfigs.engine03.model} />
+        <AiChatbotWidget currentTab={currentTab} aiModelName={aiConfigs.engine03.model} locale={locale} />
       )}
       </div>
     </div>

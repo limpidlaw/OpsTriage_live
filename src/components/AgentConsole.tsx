@@ -192,8 +192,8 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
         <div className="text-center space-y-4">
           <AlertTriangle className="w-10 h-10 text-slate-500 mx-auto animate-pulse" />
           <div className="space-y-1">
-            <p className="text-sm font-bold text-slate-200">티켓이 존재하지 않습니다</p>
-            <p className="text-xs text-slate-500">수파베이스 데이터베이스가 로딩 중이거나 티켓 레코드가 비어 있습니다.</p>
+            <p className="text-sm font-bold text-slate-200">{(t.console as any).noActiveTicketTitle}</p>
+            <p className="text-xs text-slate-500">{(t.console as any).noActiveTicketDesc}</p>
           </div>
         </div>
       </div>
@@ -504,7 +504,11 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
                     A
                   </div>
                   <span className="text-xs font-bold text-blue-400">
-                    {locale === 'ko' ? '1차 이관 응답 (SLA FRT Satisfied)' : 'First Response (SLA FRT Satisfied)'}
+                    {locale === 'ko' 
+                      ? '1차 이관 응답 (SLA FRT Satisfied)' 
+                      : locale === 'es' 
+                        ? 'Primera respuesta (SLA FRT Satisfecho)' 
+                        : 'First Response (SLA FRT Satisfied)'}
                   </span>
                 </div>
                 <span className="text-[10px] text-blue-500 font-mono">{activeTicket.firstResponseAt || '2026-07-08 23:44'}</span>
@@ -519,20 +523,30 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
               <div className="flex items-center space-x-2 text-amber-950 dark:text-amber-400">
                 <AlertTriangle className="w-4 h-4 text-amber-800 dark:text-amber-500 animate-pulse" />
                 <span className="text-[11px] font-black uppercase tracking-tight">
-                  {locale === 'ko' ? 'L2 부서 조치 완료 (OLA Resolved)' : 'L2 Engineering Handover Resolved'}
+                  {locale === 'ko' 
+                    ? 'L2 부서 조치 완료 (OLA Resolved)' 
+                    : locale === 'es' 
+                      ? 'Handover de Ingeniería L2 Resuelto' 
+                      : 'L2 Engineering Handover Resolved'}
                 </span>
               </div>
               <p className="text-[11.5px] text-slate-700 dark:text-slate-350 leading-relaxed font-semibold">
                 {activeTicket.manualEscalationNote ? (
                   <span>
-                    {locale === 'ko' ? '수동 조치 증적 피드백: ' : 'Manual Feedback Trace: '}
+                    {locale === 'ko' 
+                      ? '수동 조치 증적 피드백: ' 
+                      : locale === 'es' 
+                        ? 'Registro de retroalimentación manual: ' 
+                        : 'Manual Feedback Trace: '}
                     <strong className="text-amber-950 dark:text-amber-300 font-black bg-amber-100 dark:bg-transparent px-1 rounded">{activeTicket.manualEscalationNote}</strong>
                   </span>
                 ) : (
                   <span>
                     {locale === 'ko' 
                       ? `L2 ${activeTicket.olaEscalatedTeam || '엔지니어링'} 팀에서 기술 장애 복구를 완료했습니다. 고객에게 최종 해결 피드백을 전달하십시오.` 
-                      : `L2 ${activeTicket.olaEscalatedTeam || 'Engineering'} team has successfully completed OLA recovery. Send final reply.`}
+                      : locale === 'es'
+                        ? `El equipo de L2 ${activeTicket.olaEscalatedTeam || 'Ingeniería'} ha completado con éxito la recuperación de OLA. Enviar respuesta final.`
+                        : `L2 ${activeTicket.olaEscalatedTeam || 'Engineering'} team has successfully completed OLA recovery. Send final reply.`}
                   </span>
                 )}
               </p>
@@ -624,12 +638,12 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
               >
                 <span>
                   {activeTicket.status === 'Resolved' 
-                    ? (locale === 'ko' ? '전송 완료됨' : 'Replied') 
+                    ? (locale === 'ko' ? '전송 완료됨' : locale === 'es' ? 'Respondido' : 'Replied') 
                     : (activeTicket.status === 'Open' && (activeTicket.aiSuggestedL2Team || isEscalateForced))
-                      ? (locale === 'ko' ? 'L2 이관 및 최초 답변 전송 (FRT)' : 'Send Escalation & FRT')
+                      ? (locale === 'ko' ? 'L2 이관 및 최초 답변 전송 (FRT)' : locale === 'es' ? 'Enviar escalación y FRT' : 'Send Escalation & FRT')
                       : activeTicket.status === 'L2_Resolved'
-                        ? (locale === 'ko' ? '최종 복구 답변 전송 및 종결' : 'Final Close & Reply')
-                        : (locale === 'ko' ? '최종 답변 전송 및 종결' : 'Send Reply & Close')
+                        ? (locale === 'ko' ? '최종 복구 답변 전송 및 종결' : locale === 'es' ? 'Cierre final y respuesta' : 'Final Close & Reply')
+                        : (locale === 'ko' ? '최종 답변 전송 및 종결' : locale === 'es' ? 'Enviar respuesta y cerrar' : 'Send Reply & Close')
                   }
                 </span>
                 {activeTicket.status !== 'Resolved' && <Send className="w-3.5 h-3.5" />}
@@ -662,14 +676,16 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
                   <span>
                     {locale === 'ko' 
                       ? "AI 권장 사항: 이 티켓은 L1 선에서 즉시 종결 처리가 가능하여 L2 이관이 필요하지 않습니다." 
-                      : "AI Guideline: L1 direct resolution recommended. L2 escalation is not required."}
+                      : locale === 'es'
+                        ? "Recomendación de IA: Este ticket se puede resolver en L1 directamente sin escalación a L2."
+                        : "AI Guideline: L1 direct resolution recommended. L2 escalation is not required."}
                   </span>
                 </div>
                 <button
                   onClick={() => setIsEscalateForced(true)}
                   className="px-3 py-1.5 bg-slate-950 border border-slate-880 hover:border-slate-700 hover:bg-slate-900 text-slate-300 hover:text-slate-100 rounded text-[10px] font-black uppercase transition-all"
                 >
-                  {locale === 'ko' ? "수동 이관 활성화" : "Force Escalate"}
+                  {locale === 'ko' ? "수동 이관 활성화" : locale === 'es' ? "Forzar escalación" : "Force Escalate"}
                 </button>
               </div>
             ) : (
@@ -756,7 +772,9 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
                                 <span>
                                   {locale === 'ko' 
                                     ? '위험: 가합산 복구 시간(2X OLA)이 B2B P1 SLA 한도를 초과합니다! 안전 정책을 위반했습니다.'
-                                    : 'CRITICAL: Total OLA margin violates B2B P1 SLA target limits! Resolution required.'}
+                                    : locale === 'es'
+                                      ? 'PELIGRO: ¡El OLA combinado excede el límite de SLA! ¡Se violó la política de seguridad.'
+                                      : 'CRITICAL: Total OLA margin violates B2B P1 SLA target limits! Resolution required.'}
                                 </span>
                               </div>
                             ) : (
@@ -765,7 +783,9 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
                                 <span>
                                   {locale === 'ko' 
                                     ? '안전: 가합산 수치가 SLA 허용 오차 한도 이내입니다. 이관이 승인되었습니다.'
-                                    : 'SAFE: Total expected OLA margin satisfies SLA threshold metrics. Escalation approved.'}
+                                    : locale === 'es'
+                                      ? 'SEGURO: Las métricas combinadas están dentro del límite de tolerancia de SLA. Escalación aprobada.'
+                                      : 'SAFE: Total expected OLA margin satisfies SLA threshold metrics. Escalation approved.'}
                                 </span>
                               </div>
                             )}
@@ -778,7 +798,11 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
                     <div className="md:col-span-3 space-y-2.5 flex flex-col justify-between">
                       <div className="flex items-center justify-between border-b border-slate-850 pb-1">
                         <label className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">
-                          {locale === 'ko' ? "L2 이관용 마크다운 기술 스펙 (참고용)" : "L2 Handover Technical Spec (Ref)"}
+                          {locale === 'ko' 
+                            ? "L2 이관용 마크다운 기술 스펙 (참고용)" 
+                            : locale === 'es'
+                              ? "Especificación técnica de transferencia L2 (Ref)"
+                              : "L2 Handover Technical Spec (Ref)"}
                         </label>
                         <button
                           onClick={handleCopyMarkdown}
@@ -786,7 +810,11 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
                           title="Copy editable markdown template to clipboard"
                         >
                           <Copy className="w-3.5 h-3.5" />
-                          <span>{copied ? (locale === 'ko' ? '복사 완료!' : 'Copied!') : (locale === 'ko' ? '복사하기' : 'Copy')}</span>
+                          <span>
+                            {copied 
+                              ? (locale === 'ko' ? '복사 완료!' : locale === 'es' ? '¡Copiado!' : 'Copied!') 
+                              : (locale === 'ko' ? '복사하기' : locale === 'es' ? 'Copiar' : 'Copy')}
+                          </span>
                         </button>
                       </div>
 
@@ -812,17 +840,29 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
                           <div className="bg-slate-950 border border-slate-850 p-2.5 rounded-lg space-y-1.5 leading-normal">
                             <div className="flex items-center justify-between border-b border-slate-850 pb-1.5 mb-1.5">
                               <span className="text-[9px] text-slate-500 font-bold uppercase tracking-tight">
-                                {locale === 'ko' ? "L2 연동 연결 상태" : "L2 Integration Status"}
+                                {locale === 'ko' ? "L2 연동 연결 상태" : locale === 'es' ? "Estado de integración L2" : "L2 Integration Status"}
                               </span>
                               {isSystemEnabled ? (
                                 <span className="text-[8px] bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-400 dark:border-emerald-500/30 text-emerald-950 dark:text-emerald-400 font-black uppercase px-1.5 py-0.5 rounded flex items-center space-x-1 animate-pulse">
                                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400"></span>
-                                  <span>{locale === 'ko' ? `API 자동 연동 완료 (${system.toUpperCase()})` : `API Connected (${system.toUpperCase()})`}</span>
+                                  <span>
+                                    {locale === 'ko' 
+                                      ? `API 자동 연동 완료 (${system.toUpperCase()})` 
+                                      : locale === 'es'
+                                        ? `Conectado a la API (${system.toUpperCase()})`
+                                        : `API Connected (${system.toUpperCase()})`}
+                                  </span>
                                 </span>
                               ) : (
                                 <span className="text-[8px] bg-amber-50 dark:bg-amber-950/60 border border-amber-400 dark:border-amber-500/30 text-amber-950 dark:text-amber-400 font-black uppercase px-1.5 py-0.5 rounded flex items-center space-x-1 animate-pulse">
                                   <span className="w-1.5 h-1.5 rounded-full bg-amber-600 dark:bg-amber-400"></span>
-                                  <span>{locale === 'ko' ? `수동 이관 필요 (${system.toUpperCase()})` : `Manual Action Required (${system.toUpperCase()})`}</span>
+                                  <span>
+                                    {locale === 'ko' 
+                                      ? `수동 이관 필요 (${system.toUpperCase()})` 
+                                      : locale === 'es'
+                                        ? `Acción manual requerida (${system.toUpperCase()})`
+                                        : `Manual Action Required (${system.toUpperCase()})`}
+                                  </span>
                                 </span>
                               )}
                             </div>
@@ -833,7 +873,9 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
                                   <span>
                                     {locale === 'ko' 
                                       ? `이관 승인 시 L2 ${system.toUpperCase()} 티켓이 실시간 자동 발행되며, 고객에게 1차 FRT 답변이 즉시 원클릭 자동 디스패치됩니다.`
-                                      : `Escalating triggers real-time ${system.toUpperCase()} issue creation and sends first response to client.`}
+                                      : locale === 'es'
+                                        ? `La aprobación de la escalación emite automáticamente un ticket de L2 ${system.toUpperCase()} en tiempo real.`
+                                        : `Escalating triggers real-time ${system.toUpperCase()} issue creation and sends first response to client.`}
                                   </span>
                                 </>
                               ) : (
@@ -842,7 +884,9 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
                                   <span>
                                     {locale === 'ko' 
                                       ? `주의: 본 L2 부서는 API 연동이 비활성화 상태입니다. 이관 답변 전송 후, L2 ${system.toUpperCase()} 시스템에 상담원이 직접 이슈를 수동 생성해 주셔야 합니다.`
-                                      : `Warning: API integration is disabled. You must manually register this ticket in ${system.toUpperCase()} system after sending response.`}
+                                      : locale === 'es'
+                                        ? `Advertencia: Este departamento de L2 tiene la integración de API desactivada. Debe registrar manualmente.`
+                                        : `Warning: API integration is disabled. You must manually register this ticket in ${system.toUpperCase()} system after sending response.`}
                                   </span>
                                 </>
                               )}
@@ -871,7 +915,9 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
             <p className="text-[11px] text-slate-500 leading-relaxed">
               {locale === 'ko' 
                 ? 'HIPAA/GDPR 개인정보 보호정책에 의거, 원본 개인식별정보(PII) 조회 내역이 감사용 데이터베이스(pii_audit_logs)에 영구 기록됩니다. 구체적인 조회 목적을 입력하십시오.'
-                : 'Under HIPAA policy guidelines, unmasking PII is logged in pii_audit_logs permanently. Input your target justification reason.'
+                : locale === 'es'
+                  ? 'De acuerdo con la política HIPAA/GDPR, el acceso a PII se registra permanentemente en la base de datos de auditoría. Ingrese el motivo de la consulta.'
+                  : 'Under HIPAA policy guidelines, unmasking PII is logged in pii_audit_logs permanently. Input your target justification reason.'
               }
             </p>
 
@@ -879,7 +925,7 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
               <textarea
                 value={auditReason}
                 onChange={(e) => setAuditReason(e.target.value)}
-                placeholder={locale === 'ko' ? '조회 목적을 최소 5자 이상 기입하십시오.' : 'Enter reason (at least 5 characters)...'}
+                placeholder={locale === 'ko' ? '조회 목적을 최소 5자 이상 기입하십시오.' : locale === 'es' ? 'Ingrese el motivo (al menos 5 caracteres)...' : 'Enter reason (at least 5 characters)...'}
                 className="w-full h-20 bg-slate-950 border border-slate-850 rounded p-2.5 text-xs text-slate-200 focus:outline-none focus:border-red-500 resize-none leading-relaxed"
                 autoFocus
               />
@@ -890,7 +936,7 @@ export const AgentConsole: React.FC<ConsoleProps> = ({
                   onClick={() => { setShowAuditModal(false); setAuditReason(''); }}
                   className="flex-1 py-2 bg-slate-800 hover:bg-slate-750 text-slate-400 hover:text-slate-200 rounded text-xs font-bold"
                 >
-                  {locale === 'ko' ? '취소' : 'Cancel'}
+                  {locale === 'ko' ? '취소' : locale === 'es' ? 'Cancelar' : 'Cancel'}
                 </button>
                 <button
                   type="submit"
