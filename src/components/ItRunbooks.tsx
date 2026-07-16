@@ -255,6 +255,14 @@ export const ItRunbooks: React.FC<RunbooksProps> = ({
                       : telemetryIntegrations.customEnabled;
                   const isManualEscalated = pb.ticketId && !isSysEnabled;
 
+                  if (pb.id === 'pb-1') {
+                    return (
+                      <div className="text-[7.5px] bg-blue-950 border border-blue-500/25 text-blue-400 font-black uppercase px-1.5 py-0.5 rounded tracking-wide mb-1.5 w-max">
+                        {locale === 'ko' ? "💡 예시 시뮬레이션" : locale === 'es' ? "💡 Simulación de Ejemplo" : "💡 Simulation Demo"}
+                      </div>
+                    );
+                  }
+
                   return isManualEscalated ? (
                     <div className="text-[7.5px] bg-amber-950 border border-amber-500/20 text-amber-400 font-black uppercase px-1.5 py-0.5 rounded tracking-wide mb-1 w-max">
                       {locale === 'ko' 

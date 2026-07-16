@@ -9,7 +9,7 @@
 import React, { useState, useEffect } from 'react';
 import { translations, Locale } from '../locales/i18n';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts';
-import { PlusCircle, CheckCircle2 } from 'lucide-react';
+import { PlusCircle, CheckCircle2, Sparkles } from 'lucide-react';
 import { globalEventBus } from '../App';
 
 import { Ticket } from '../App';
@@ -180,11 +180,24 @@ export const SlaDashboard: React.FC<SlaProps> = ({
 
         <div className="space-y-6">
           {}
-          <div>
-            <h2 className="text-lg font-black text-slate-100">{t.sla.title}</h2>
-            <p className="text-[11px] text-slate-500">
-              {locale === 'ko' ? '실시간 옴니채널 OLA/SLA 상태 지표와 B2B 고객사 헬스 추이를 관제합니다.' : 'Real-time telemetry of OLA/SLA thresholds and accounts health parameters.'}
-            </p>
+          <div className="space-y-4">
+            <div>
+              <h2 className="text-lg font-black text-slate-100">{t.sla.title}</h2>
+              <p className="text-[11px] text-slate-500">
+                {locale === 'ko' ? '실시간 옴니채널 OLA/SLA 상태 지표와 B2B 고객사 헬스 추이를 관제합니다.' : 'Real-time telemetry of OLA/SLA thresholds and accounts health parameters.'}
+              </p>
+            </div>
+            
+            <div className="bg-blue-950/20 border border-blue-500/20 p-3 rounded-lg flex items-start space-x-2 text-[10.5px] leading-normal text-blue-400">
+              <Sparkles className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5 animate-pulse" />
+              <span>
+                {locale === 'ko' 
+                  ? "💡 안내: 현재 표시되는 B2B 고객사 지표(Acme, Stark, Wayne, Oscorp)는 시스템 흐름을 보여주는 시뮬레이션용 예시 데이터입니다. 실제 연동 티켓 접수 및 B2B 데이터베이스 활성화 시 실시간 연동 데이터로 자동 대체됩니다."
+                  : locale === 'es'
+                    ? "💡 Nota: Los datos de clientes B2B que se muestran actualmente son ejemplos de simulación. Se reemplazarán automáticamente con el estado real de la base de datos de Supabase una vez que comience la conexión en vivo."
+                    : "💡 Notice: The B2B client data currently displayed are simulation examples. They will be automatically replaced with the actual live Supabase DB status once connection begins."}
+              </span>
+            </div>
           </div>
 
           {}
