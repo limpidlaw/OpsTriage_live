@@ -465,8 +465,7 @@ export const App: React.FC = () => {
   const [starkHealth, setStarkHealth] = useState<number>(45); // Initial Warn/At Risk state
   const [starkStatus, setStarkStatus] = useState<string>('At Risk');
 
-  // Admin lock PIN state
-  const [adminPin, setAdminPin] = useState<string>('');
+
 
   // DB Fetch Error telemetry
   const [dbError, setDbError] = useState<string | null>(null);
@@ -547,16 +546,7 @@ export const App: React.FC = () => {
         }
       }
 
-      // 3. Fetch global app settings for admin pin [REQ_DEMO_PIN_LOCKDOWN]
-      const { data: settingsData, error: settingsErr } = await supabase
-        .from('app_settings')
-        .select('admin_pin')
-        .eq('id', 'default_config')
-        .single();
-      if (settingsErr) throw settingsErr;
-      if (settingsData && settingsData.admin_pin) {
-        setAdminPin(settingsData.admin_pin);
-      }
+
     } catch (e: any) {
       console.error("Error fetching live Supabase data:", e);
       setDbError(e.message || String(e));
@@ -1016,7 +1006,7 @@ export const App: React.FC = () => {
             setIsAdminAuthenticated={setIsAdminAuthenticated}
             isSimulatorActive={isSimulatorActive}
             setCurrentTab={setCurrentTab}
-            adminPin={adminPin}
+            isSupabaseConfigured={isSupabaseConfigured}
           />
         )}
         

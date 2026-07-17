@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { translations, Locale } from '../locales/i18n';
 import { Lock, Unlock, AlertCircle, ArrowRight } from 'lucide-react';
 import { globalEventBus } from '../App';
+import { supabase } from '../utils/supabaseClient';
 
 interface HubProps {
   locale: Locale;
@@ -14,7 +15,7 @@ interface HubProps {
   setIsAdminAuthenticated: (val: boolean) => void;
   isSimulatorActive: boolean;
   setCurrentTab: (tab: string) => void;
-  adminPin: string;
+  isSupabaseConfigured: boolean;
 }
 
 export const HubModule: React.FC<HubProps> = ({
@@ -23,7 +24,7 @@ export const HubModule: React.FC<HubProps> = ({
   setIsAdminAuthenticated,
   isSimulatorActive,
   setCurrentTab,
-  adminPin
+  isSupabaseConfigured
 }) => {
   const t = translations[locale];
   const [pinInput, setPinInput] = useState('');
@@ -41,13 +42,23 @@ export const HubModule: React.FC<HubProps> = ({
     };
   }, []);
 
-  const handlePinSubmit = (e: React.FormEvent) => {
+  const handlePinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // ponytail: simple hash check to avoid plain-text fallback password leak in source code
-    const isMatched = adminPin 
-      ? pinInput === adminPin 
-      : [...pinInput].reduce((acc, char) => (acc * 31 + char.charCodeAt(0)) & 0xffffff, 0) === 1604928; // Hash of '0000'
+    let isMatched = false;
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase.rpc('verify_admin_pin', { input_pin: pinInput });
+        if (!error && typeof data === 'boolean') {
+          isMatched = data;
+        }
+      } catch (err) {
+        console.error("Supabase RPC verification failed:", err);
+      }
+    } else {
+      // ponytail: non-cryptographic numeric hash check to avoid plain-text fallback password leak in source code
+      isMatched = [...pinInput].reduce((acc, char) => (acc * 31 + char.charCodeAt(0)) & 0xffffff, 0) === 1604928; // Hash of '0000'
+    }
 
     if (isMatched) {
       setIsAdminAuthenticated(true);
