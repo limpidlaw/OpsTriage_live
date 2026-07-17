@@ -195,14 +195,14 @@ export const HubModule: React.FC<HubProps> = ({
 
       {}
       {showPinModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-sm w-full space-y-4 shadow-none">
-            <div className="flex items-center space-x-3 text-blue-400">
+        <div className="fixed inset-0 bg-slate-950/40 dark:bg-slate-950/65 backdrop-blur-[1.5px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 max-w-sm w-full space-y-4 shadow-xl dark:shadow-none">
+            <div className="flex items-center space-x-3 text-blue-500">
               <Lock className="w-5 h-5" />
-              <h3 className="text-sm font-black text-slate-100">{locale === 'ko' ? '최고관리자 보안 PIN 검증' : 'Admin Security Verification'}</h3>
+              <h3 className="text-sm font-black text-slate-800 dark:text-slate-100">{locale === 'ko' ? '최고관리자 보안 PIN 검증' : 'Admin Security Verification'}</h3>
             </div>
             
-            <p className="text-[11px] text-slate-500 leading-relaxed">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
               {locale === 'ko' 
                 ? 'SLA 정책 튜닝 및 IT 인시던트 긴급 대응을 승인하려면 데모 최고관리자 PIN(0000)을 입력하십시오.'
                 : 'Enter the admin PIN (0000) to authorize policies adjustments and runbooks command controls.'
@@ -216,7 +216,7 @@ export const HubModule: React.FC<HubProps> = ({
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value.replace(/\D/g, ''))}
                 placeholder="••••"
-                className="w-full text-center tracking-widest text-lg font-mono bg-slate-950 border border-slate-850 rounded py-2 text-slate-200 focus:outline-none focus:border-blue-500"
+                className="w-full text-center tracking-widest text-lg font-mono bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded py-2 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-blue-500"
                 autoFocus
               />
 
@@ -231,13 +231,13 @@ export const HubModule: React.FC<HubProps> = ({
                 <button
                   type="button"
                   onClick={() => { setShowPinModal(false); setErrorMessage(''); setPinInput(''); }}
-                  className="flex-1 py-2 bg-slate-800 hover:bg-slate-750 text-slate-400 hover:text-slate-200 rounded text-xs font-bold"
+                  className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 border border-slate-200 dark:border-transparent dark:bg-slate-800 dark:hover:bg-slate-750 dark:text-slate-400 dark:hover:text-slate-200 rounded text-xs font-bold transition-all"
                 >
                   {locale === 'ko' ? '취소' : 'Cancel'}
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 bg-blue-600 hover:bg-blue-750 text-white rounded text-xs font-bold"
+                  className="flex-1 py-2 bg-blue-600 hover:bg-blue-750 text-white rounded text-xs font-bold transition-all border border-blue-700 dark:border-transparent"
                 >
                   {locale === 'ko' ? '승인' : 'Submit'}
                 </button>
