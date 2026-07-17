@@ -466,7 +466,7 @@ export const App: React.FC = () => {
   const [starkStatus, setStarkStatus] = useState<string>('At Risk');
 
   // Admin lock PIN state
-  const [adminPin, setAdminPin] = useState<string>('0000');
+  const [adminPin, setAdminPin] = useState<string>('');
 
   // DB Fetch Error telemetry
   const [dbError, setDbError] = useState<string | null>(null);
